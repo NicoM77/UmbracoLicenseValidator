@@ -5,20 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <meta name="description" content="Check an Umbraco license key against a domain. The key is sent only to Umbraco's own licensing service.">
+<!--
+  Everything but the licensing call is served from this origin, so the only
+  host named here is Umbraco's. The browser enforces the privacy claim: a
+  request anywhere else is blocked rather than merely unintended.
+
+  style-src needs 'unsafe-inline' because Lit sets styles inline on the
+  elements it renders. That permits inline styling, not code execution, and it
+  leaves connect-src — the directive the promise rests on — untouched.
+-->
 <meta http-equiv="Content-Security-Policy" content="
   default-src 'none';
-  script-src https://cdn.jsdelivr.net 'self';
-  style-src https://cdn.jsdelivr.net 'self' 'unsafe-inline';
-  font-src https://cdn.jsdelivr.net;
+  script-src 'self';
+  style-src 'self' 'unsafe-inline';
+  font-src 'self';
   img-src 'self' data:;
   connect-src https://license-validation.umbraco.com;
   base-uri 'none'; form-action 'none'">
 <title>Umbraco License Validator</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='15' fill='%231b264f'/><path d='M11 10v7a5 5 0 0 0 10 0v-7' stroke='%23fff' stroke-width='3' fill='none' stroke-linecap='round'/></svg>">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@umbraco-ui/uui@2.0.2/dist/themes/light.css">
-<link rel="stylesheet" href="./styles.css">
-<script type="module" src="https://cdn.jsdelivr.net/npm/@umbraco-ui/uui@2.0.2/+esm"></script>
-<script type="module" src="./dist/main.js"></script>
+<link rel="stylesheet" href="./dist/app.css">
+<script type="module" src="./dist/app.js"></script>
 </head>
 <body>
 <uui-icon-registry-essential>

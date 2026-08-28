@@ -1,3 +1,5 @@
+import './components.js';
+
 import { validateLicense, type ValidationResponse } from './api.js';
 import { toHostname } from './domain.js';
 import { PRODUCTS, productLabel, type Product } from './products.js';

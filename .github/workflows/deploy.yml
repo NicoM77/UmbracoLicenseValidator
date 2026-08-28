@@ -32,11 +32,13 @@ jobs:
       - run: npm ci
       - run: npm run build
 
+      # dist/ holds the bundled script, the stylesheet and the Lato fonts, so
+      # the published site serves every asset from its own origin.
       - name: Assemble the site
         run: |
-          mkdir -p _site/dist
-          cp index.html styles.css .nojekyll _site/
-          cp dist/*.js _site/dist/
+          mkdir -p _site
+          cp index.html .nojekyll _site/
+          cp -r dist _site/dist
 
       - uses: actions/configure-pages@v5
 

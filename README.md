@@ -13,13 +13,14 @@ asks on startup.
 The page posts directly from your browser to
 `https://license-validation.umbraco.com/api/ValidateLicense`, Umbraco's own
 service. There is no backend here, nothing is logged, nothing is stored, and the
-key never appears in a URL. A `Content-Security-Policy` with
-`connect-src https://license-validation.umbraco.com` enforces it: the browser
-will block a request to anywhere else, so the promise is machine-checked rather
-than merely stated.
+key never appears in a URL.
 
-The one third party involved is jsDelivr, which serves the Umbraco UI Library and
-its font. It never sees the key.
+That is the only external request the page makes. Everything else — the script,
+the stylesheet, the Umbraco UI Library, the Lato fonts — is bundled at build time
+and served from this origin, so there is no CDN in the loading path and no third
+party to trust. A `Content-Security-Policy` naming a single host under
+`connect-src` makes it enforceable: the browser blocks a request anywhere else,
+so the promise is machine-checked rather than merely stated.
 
 ## What this tool knows about the endpoint
 
@@ -83,15 +84,25 @@ Then open `http://localhost:3000`. ES modules need a real origin, so opening
 
 ## How it is put together
 
-No framework and no bundler. TypeScript compiles to plain ES modules that the
-browser loads directly; the Umbraco UI Library arrives from a CDN as web
-components. GitHub Actions runs the compile and publishes to Pages, so the
-repository holds only source.
+TypeScript with no framework. esbuild bundles the application together with the
+Umbraco UI Library web components it uses, and compiles the stylesheet with the
+Umbraco design tokens and the Lato fonts alongside it. `tsc` typechecks but emits
+nothing.
+
+Components are imported one at a time rather than through the `@umbraco-ui/uui`
+barrel. The package marks every component as having side effects, so importing
+the barrel would bundle all eighty of them; naming the twelve that are used keeps
+the script at about 110 KB instead of 360 KB.
+
+GitHub Actions runs the build and publishes to Pages, so the repository holds
+source only.
 
 | File | Role |
 | --- | --- |
 | `index.html` | The backoffice chrome and the form |
-| `styles.css` | Layout, built on the UUI design tokens |
+| `src/app.css` | Entry point: Umbraco tokens, then this app's layout |
+| `src/styles.css` | Layout, built on the UUI design tokens |
+| `src/components.ts` | The UI Library elements to include in the bundle |
 | `src/api.ts` | The call to Umbraco |
 | `src/products.ts` | The product catalogue |
 | `src/domain.ts` | Reducing what you type to a bare hostname |

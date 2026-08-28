@@ -1,0 +1,7 @@
+/*
+ * The Umbraco design tokens, typography and Lato web fonts, followed by this
+ * app's own layout. Both are bundled into dist/app.css at build time so the
+ * page loads nothing from a third party.
+ */
+@import '@umbraco-ui/uui/themes/light.css';
+@import './styles.css';
