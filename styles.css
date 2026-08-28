@@ -1,0 +1,306 @@
+/*
+ * Layout variables mirroring Umbraco's own backoffice chrome. Everything else
+ * comes from the UUI theme stylesheet, which defines the --uui-* tokens.
+ */
+:root {
+  --umb-app-header-height: 60px;
+  --umb-header-layout-height: 70px;
+  --umb-footer-layout-height: 54px;
+  --umb-section-sidebar-width: 300px;
+  --umb-property-label-col: 200px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--uui-font-family);
+  font-size: var(--uui-type-default-size);
+  line-height: 21px;
+  color: var(--uui-color-text);
+  background: var(--uui-color-background);
+  -webkit-font-smoothing: antialiased;
+}
+
+.app { display: flex; flex-direction: column; height: 100%; }
+
+/* ── app header ────────────────────────────────────────────────────────── */
+
+.app-header {
+  flex: 0 0 var(--umb-app-header-height);
+  display: flex;
+  align-items: center;
+  gap: var(--uui-size-space-5);
+  padding: 0 var(--uui-size-space-5);
+  background: var(--uui-color-header-surface);
+}
+
+.brand { display: flex; }
+.brand-mark { width: 30px; height: 30px; display: block; }
+
+.sections { flex: 1 1 auto; display: flex; align-self: stretch; overflow: hidden; }
+
+.tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 70px;
+  padding: 9px 15px;
+  font-size: 16px;
+  white-space: nowrap;
+  color: var(--uui-color-header-contrast);
+}
+
+.tab[data-current] { color: var(--uui-color-header-contrast-emphasis); }
+
+/* The coral underline is the most recognisable cue in the whole backoffice. */
+.tab::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 7px;
+  width: calc(100% - 14px);
+  height: 4px;
+  background: var(--uui-color-current);
+  border-radius: var(--uui-border-radius) var(--uui-border-radius) 0 0;
+  opacity: 0;
+}
+
+.tab[data-current]::before { opacity: 1; }
+
+.repo-link {
+  flex: 0 0 auto;
+  color: var(--uui-color-header-contrast);
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.repo-link:hover { color: var(--uui-color-header-contrast-emphasis); text-decoration: underline; }
+
+/* ── sidebar: the product tree ─────────────────────────────────────────── */
+
+.app-body { flex: 1 1 auto; display: flex; min-height: 0; }
+
+.sidebar {
+  flex: 0 0 var(--umb-section-sidebar-width);
+  display: flex;
+  flex-direction: column;
+  padding: var(--uui-size-space-4) 0;
+  overflow-y: auto;
+  background: var(--uui-color-surface);
+  border-right: 1px solid var(--uui-color-border);
+}
+
+.sidebar h2 {
+  margin: 0 0 var(--uui-size-space-3);
+  padding: 0 var(--uui-size-space-4);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--uui-color-interactive);
+}
+
+.tree { display: flex; flex-direction: column; }
+
+.tree button {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: center;
+  gap: var(--uui-size-space-2);
+  min-height: 36px;
+  padding: 0 var(--uui-size-space-3);
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: var(--uui-color-interactive);
+  cursor: pointer;
+}
+
+.tree button:hover { background: var(--uui-color-surface-emphasis); color: var(--uui-color-interactive-emphasis); }
+
+.tree button[aria-current="true"] {
+  background: var(--uui-color-current);
+  color: var(--uui-color-current-contrast);
+  font-weight: 700;
+}
+
+.tree uui-icon { justify-self: center; font-size: 15px; }
+
+.tree .edition { color: var(--uui-color-text-alt); font-weight: 400; }
+
+/* ── workspace ─────────────────────────────────────────────────────────── */
+
+.workspace { flex: 1 1 auto; display: flex; flex-direction: column; min-width: 0; }
+
+.workspace > header {
+  flex: 0 0 var(--umb-header-layout-height);
+  display: flex;
+  align-items: center;
+  background: var(--uui-color-surface);
+  border-bottom: 1px solid var(--uui-color-border);
+}
+
+.headline {
+  display: flex;
+  align-items: center;
+  gap: var(--uui-size-space-3);
+  margin: 0 var(--uui-size-layout-1);
+}
+
+.headline uui-icon { font-size: 18px; color: var(--uui-color-interactive); }
+.headline h1 { margin: 0; font-size: 21px; font-weight: 700; }
+
+.workspace-body { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
+
+.workspace-body > main {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--uui-size-layout-1);
+  padding: var(--uui-size-layout-1);
+  overflow-y: auto;
+}
+
+.workspace-body > footer {
+  flex: 0 0 var(--umb-footer-layout-height);
+  display: flex;
+  align-items: center;
+  background: var(--uui-color-surface);
+  border-top: 1px solid var(--uui-color-border);
+}
+
+.actions {
+  display: flex;
+  gap: var(--uui-size-space-2);
+  margin: 0 var(--uui-size-layout-1) 0 auto;
+}
+
+/* ── property rows, as laid out by umb-property-layout ─────────────────── */
+
+.property {
+  display: grid;
+  grid-template-columns: var(--umb-property-label-col) minmax(0, 1fr);
+  column-gap: var(--uui-size-layout-2);
+  padding: var(--uui-size-layout-1) 0;
+  container-type: inline-size;
+}
+
+.property:first-child { padding-top: 0; }
+
+.property > div { grid-column: span 2; }
+.property .editor { margin-top: var(--uui-size-space-3); }
+
+@container (width > 700px) {
+  .property > div { grid-column: span 1; }
+  .property .editor { margin-top: 0; }
+}
+
+.description {
+  margin: var(--uui-size-space-1) 0 0;
+  color: var(--uui-color-text-alt);
+  font-size: var(--uui-type-small-size);
+}
+
+.editor uui-input, .editor uui-textarea { width: 100%; }
+
+.field-error {
+  margin: var(--uui-size-space-2) 0 0;
+  color: var(--uui-color-danger);
+  font-size: var(--uui-type-small-size);
+}
+
+.privacy {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--uui-size-space-3);
+  margin: 0;
+  padding-top: var(--uui-size-layout-1);
+  border-top: 1px solid var(--uui-color-divider-standalone);
+  color: var(--uui-color-text-alt);
+  font-size: var(--uui-type-small-size);
+}
+
+.privacy uui-icon { flex: 0 0 auto; margin-top: 2px; }
+.privacy code { font-size: inherit; }
+
+/* ── result ────────────────────────────────────────────────────────────── */
+
+.verdict { display: flex; align-items: flex-start; gap: var(--uui-size-space-4); }
+.verdict uui-icon { flex: 0 0 auto; margin-top: 3px; font-size: 20px; }
+.verdict h3 { margin: 0; font-size: 16px; font-weight: 700; }
+.verdict p { margin: var(--uui-size-space-1) 0 0; color: var(--uui-color-text-alt); }
+
+.verdict[data-tone="positive"] uui-icon { color: var(--uui-color-positive); }
+.verdict[data-tone="danger"] uui-icon { color: var(--uui-color-danger); }
+.verdict[data-tone="warning"] uui-icon { color: var(--uui-color-warning-standalone); }
+.verdict[data-tone="default"] uui-icon { color: var(--uui-color-default); }
+
+.facts {
+  display: grid;
+  grid-template-columns: var(--umb-property-label-col) minmax(0, 1fr);
+  gap: var(--uui-size-space-2) var(--uui-size-layout-2);
+  margin: var(--uui-size-layout-1) 0 0;
+}
+
+.facts:empty { display: none; }
+.facts dt { font-weight: 700; }
+.facts dd { margin: 0; overflow-wrap: anywhere; }
+
+#result-tables:not(:empty) { margin-top: var(--uui-size-layout-1); }
+#result-tables section + section { margin-top: var(--uui-size-space-5); }
+#result-tables h4 { margin: 0 0 var(--uui-size-space-3); font-size: 14px; font-weight: 700; }
+
+.raw { margin-top: var(--uui-size-layout-1); }
+.raw summary { cursor: pointer; font-weight: 700; }
+.raw .description { margin-bottom: var(--uui-size-space-3); }
+
+.raw pre {
+  margin: 0;
+  padding: var(--uui-size-space-4);
+  overflow-x: auto;
+  background: var(--uui-color-surface-alt);
+  border: 1px solid var(--uui-color-divider-standalone);
+  border-radius: var(--uui-border-radius);
+  font-size: var(--uui-type-small-size);
+  line-height: 18px;
+}
+
+.noscript { margin: var(--uui-size-layout-1); }
+
+/* ── narrow screens: the tree becomes a scroller above the workspace ───── */
+
+@media (max-width: 900px) {
+  .app-body { flex-direction: column; }
+
+  .sidebar {
+    flex: 0 0 auto;
+    padding: var(--uui-size-space-3) 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--uui-color-border);
+  }
+
+  .sidebar h2 { margin-bottom: var(--uui-size-space-2); }
+
+  .tree {
+    flex-direction: row;
+    gap: var(--uui-size-space-2);
+    padding: 0 var(--uui-size-space-4);
+    overflow-x: auto;
+  }
+
+  .tree button {
+    grid-template-columns: auto auto;
+    flex: 0 0 auto;
+    padding: 0 var(--uui-size-space-4);
+    border-radius: var(--uui-border-radius-3);
+    white-space: nowrap;
+  }
+
+  .workspace > header { flex-basis: auto; padding: var(--uui-size-space-4) 0; }
+  .workspace-body > main { padding: var(--uui-size-space-4); gap: var(--uui-size-space-4); }
+  .actions { margin: 0 var(--uui-size-space-4) 0 auto; }
+  .sections { display: none; }
+}

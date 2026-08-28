@@ -1,0 +1,16 @@
+{
+  "name": "umbraco-license-validator",
+  "version": "1.0.0",
+  "description": "Check an Umbraco license key against a domain, straight from the browser.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "serve": "npx --yes serve ."
+  },
+  "devDependencies": {
+    "@umbraco-ui/uui": "2.0.2",
+    "typescript": "^5.9.2"
+  }
+}

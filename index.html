@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Check an Umbraco license key against a domain. The key is sent only to Umbraco's own licensing service.">
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'none';
+  script-src https://cdn.jsdelivr.net 'self';
+  style-src https://cdn.jsdelivr.net 'self' 'unsafe-inline';
+  font-src https://cdn.jsdelivr.net;
+  img-src 'self' data:;
+  connect-src https://license-validation.umbraco.com;
+  base-uri 'none'; form-action 'none'">
+<title>Umbraco License Validator</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='15' fill='%231b264f'/><path d='M11 10v7a5 5 0 0 0 10 0v-7' stroke='%23fff' stroke-width='3' fill='none' stroke-linecap='round'/></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@umbraco-ui/uui@2.0.2/dist/themes/light.css">
+<link rel="stylesheet" href="./styles.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@umbraco-ui/uui@2.0.2/+esm"></script>
+<script type="module" src="./dist/main.js"></script>
+</head>
+<body>
+<uui-icon-registry-essential>
+  <div class="app">
+
+    <header class="app-header">
+      <a class="brand" href="./" aria-label="Umbraco License Validator">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <circle cx="16" cy="16" r="15" fill="#fff"/>
+          <path d="M11 10v7a5 5 0 0 0 10 0v-7" stroke="#1b264f" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </svg>
+      </a>
+      <nav class="sections" aria-hidden="true">
+        <span class="tab">Content</span>
+        <span class="tab">Media</span>
+        <span class="tab">Settings</span>
+        <span class="tab" data-current>Licensing</span>
+      </nav>
+      <a class="repo-link" href="https://github.com/NicoM77/UmbracoLicenseValidator" rel="noopener noreferrer">Source</a>
+    </header>
+
+    <div class="app-body">
+
+      <aside class="sidebar">
+        <h2 id="tree-heading">Licensing</h2>
+        <nav class="tree" id="product-tree" aria-labelledby="tree-heading"></nav>
+      </aside>
+
+      <section class="workspace">
+        <header>
+          <div class="headline">
+            <uui-icon name="lock" aria-hidden="true"></uui-icon>
+            <h1 id="workspace-title">Umbraco Forms</h1>
+          </div>
+        </header>
+
+        <form class="workspace-body" id="validator" novalidate>
+          <main>
+
+            <uui-box headline="Validate a license" headline-variant="h2">
+              <div class="property">
+                <div class="property-label">
+                  <uui-label for="license-key" required>License key</uui-label>
+                  <p class="description">The key from your Umbraco order, exactly as issued.</p>
+                </div>
+                <div class="editor">
+                  <uui-textarea id="license-key" name="licenseKey" label="License key"
+                                rows="3" auto-height spellcheck="false" autocomplete="off"></uui-textarea>
+                </div>
+              </div>
+
+              <div class="property">
+                <div class="property-label">
+                  <uui-label for="domain" required>Domain</uui-label>
+                  <p class="description">The licensed hostname. A scheme, port or path is stripped before sending.</p>
+                </div>
+                <div class="editor">
+                  <uui-input id="domain" name="domain" label="Domain" type="text"
+                             placeholder="mysite.com" spellcheck="false" autocomplete="off"></uui-input>
+                </div>
+              </div>
+
+              <p class="privacy">
+                <uui-icon name="lock" aria-hidden="true"></uui-icon>
+                Your key is posted straight from this browser to
+                <code>license-validation.umbraco.com</code> — Umbraco's own service, the same one
+                your installation calls. This page has no backend and stores nothing.
+              </p>
+            </uui-box>
+
+            <uui-box id="result" headline="Result" headline-variant="h2" hidden>
+              <uui-tag slot="header-actions" id="result-tag"></uui-tag>
+              <div class="verdict">
+                <uui-icon id="result-icon" aria-hidden="true"></uui-icon>
+                <div>
+                  <h3 id="result-headline"></h3>
+                  <p id="result-detail"></p>
+                </div>
+              </div>
+              <dl class="facts" id="result-facts"></dl>
+              <div id="result-tables"></div>
+              <details class="raw">
+                <summary>Raw response</summary>
+                <p class="description">Contains the key you submitted — redact before sharing.</p>
+                <pre id="result-raw"></pre>
+              </details>
+            </uui-box>
+
+          </main>
+
+          <footer>
+            <div class="actions">
+              <uui-button id="clear" type="button" look="secondary" label="Clear">Clear</uui-button>
+              <uui-button id="submit" type="submit" look="primary" color="positive" label="Validate">Validate</uui-button>
+            </div>
+          </footer>
+        </form>
+      </section>
+
+    </div>
+  </div>
+</uui-icon-registry-essential>
+
+<uui-toast-notification-container id="toasts" bottom-up></uui-toast-notification-container>
+
+<noscript>
+  <p class="noscript">This validator runs entirely in your browser, so it needs JavaScript enabled.</p>
+</noscript>
+</body>
+</html>
